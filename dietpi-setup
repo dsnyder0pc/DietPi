@@ -1,0 +1,274 @@
+#!/usr/bin/env perl
+################################################################################
+#
+#  dietpi-stretch
+#
+#  Edit dietpi.txt from DietPi Stretch for your home network
+#
+#  Save this file to your microSD card and run it
+#  by typing something like this:
+#
+#     perl dietpi-stretch
+#
+################################################################################
+use warnings;
+use strict;
+use LWP::Simple;
+
+# JSON stuff borrowed from https://www.perlmonks.org/?node_id=995856
+# use Data::Dumper qw(Dumper);
+
+my $FROM_JSON = qr{
+
+(?&VALUE) (?{ $_ = $^R->[1] })
+
+(?(DEFINE)
+
+(?<OBJECT>
+  (?{ [$^R, {}] })
+  \{
+    (?: (?&KV) # [[$^R, {}], $k, $v]
+      (?{ # warn Dumper { obj1 => $^R };
+     [$^R->[0][0], {$^R->[1] => $^R->[2]}] })
+      (?: , (?&KV) # [[$^R, {...}], $k, $v]
+        (?{ # warn Dumper { obj2 => $^R };
+       [$^R->[0][0], {%{$^R->[0][1]}, $^R->[1] => $^R->[2]}] })
+      )*
+    )?
+  \}
+)
+
+(?<KV>
+  (?&STRING) # [$^R, "string"]
+  : (?&VALUE) # [[$^R, "string"], $value]
+  (?{ # warn Dumper { kv => $^R };
+     [$^R->[0][0], $^R->[0][1], $^R->[1]] })
+)
+
+(?<ARRAY>
+  (?{ [$^R, []] })
+  \[
+    (?: (?&VALUE) (?{ [$^R->[0][0], [$^R->[1]]] })
+      (?: , (?&VALUE) (?{ # warn Dumper { atwo => $^R };
+             [$^R->[0][0], [@{$^R->[0][1]}, $^R->[1]]] })
+      )*
+    )?
+  \]
+)
+
+(?<VALUE>
+  \s*
+  (
+      (?&STRING)
+    |
+      (?&NUMBER)
+    |
+      (?&OBJECT)
+    |
+      (?&ARRAY)
+    |
+    true (?{ [$^R, 1] })
+  |
+    false (?{ [$^R, 0] })
+  |
+    null (?{ [$^R, undef] })
+  )
+  \s*
+)
+
+(?<STRING>
+  (
+    "
+    (?:
+      [^\\"]+
+    |
+      \\ ["\\/bfnrt]
+#    |
+#      \\ u [0-9a-fA-f]{4}
+    )*
+    "
+  )
+
+  (?{ [$^R, eval $^N] })
+)
+
+(?<NUMBER>
+  (
+    -?
+    (?: 0 | [1-9]\d* )
+    (?: \. \d+ )?
+    (?: [eE] [-+]? \d+ )?
+  )
+
+  (?{ [$^R, eval $^N] })
+)
+
+) }xms;
+
+sub from_json {
+  local $_ = shift;
+  local $^R;
+  eval { m{\A$FROM_JSON\z}; } and return $_;
+  die $@ if $@;
+  return 'no match';
+}
+
+
+print <<'EOT';
+
+---------------------------------------------------------
+-  This will edit dietpi.txt for your home network.
+-  At each prompt below, type the information requested
+   and then hit [enter] or [return].
+
+EOT
+
+if (not -f 'dietpi.txt') {
+  die "- Could not find dietpi.txt!\n",
+      "- Are you running this from the correct directory?\n";
+}
+
+########################################
+#
+#  Read desired hostname
+#
+my $hostname = '';
+until ($hostname) {
+  print "- Name your RPi (only letters, numbers and dashes): ";
+  chomp($hostname = lc(<STDIN>));
+  $hostname =~ tr/[a-z0-9\-]//dc;
+}
+
+$hostname = substr $hostname, 0, 12;
+
+my $Have_Wifi = '';
+until ($Have_Wifi =~ /^[yn]/) {
+  print "- Do you have a wifi network? (y/n) : ";
+  chomp($Have_Wifi = lc(<STDIN>));
+}
+
+########################################
+#
+#  Set values for SSID and PASS
+#
+my $SSID = '';
+my $PASS = '';
+my $Use_Ethernet = 0;
+my $Use_Wifi = 0;
+
+if ($Have_Wifi =~ /^n/) {
+  $SSID = 'My_SSID';
+  $PASS = 'My_PASS';
+  $Use_Ethernet = 1;
+} else {
+  until ($SSID) {
+    print "- Your wifi SSID: ";
+    chomp($SSID = <STDIN>);
+  }
+  until ($PASS) {
+    print "- Your wifi password: ";
+    chomp($PASS = <STDIN>);
+  }
+  $Use_Wifi = 1;
+}
+
+
+########################################
+#
+#  Parameters and values in dietpi.txt
+#  that we will update
+#
+my %config_map = (
+  AUTO_SETUP_NET_ETHERNET_ENABLED  => $Use_Ethernet,
+  AUTO_SETUP_NET_WIFI_ENABLED      => $Use_Wifi,
+  AUTO_SETUP_AUTOMATED             => 1,
+  CONFIG_BOOT_WAIT_FOR_NETWORK     => 2,
+  AUTO_SETUP_INSTALL_SOFTWARE_ID   => "5,121",
+  CONFIG_SOUNDCARD                 => "usb-dac",
+  CONFIG_SERIAL_CONSOLE_ENABLE     => 0,
+  AUTO_SETUP_NET_HOSTNAME          => $hostname,
+  AUTO_SETUP_KEYBOARD_LAYOUT       => 'us',
+  CONFIG_CHECK_CONNECTION_IP       => "8.8.8.8",
+  CONFIG_CHECK_DNS_DOMAIN          => "google.com",
+);
+my $json_info = get('http://ip-api.com/json');
+$json_info =~ s/[^[:ascii:]]/_/g;
+$json_info =~ s/\\+u\d+//g;
+my $info = from_json($json_info);
+if (defined $info) {
+  $config_map{'CONFIG_WIFI_COUNTRY_CODE'} = $info->{'countryCode'};
+  $config_map{'AUTO_SETUP_TIMEZONE'}      = $info->{'timezone'};
+}
+if (exists $ENV{'LANG'} and $ENV{'LANG'} =~ /^(\w+)\.utf.*8$/i) {
+  $config_map{'AUTO_SETUP_LOCALE'} = "$1.UTF-8",
+}
+edit_config('dietpi.txt', \%config_map);
+
+########################################
+#
+#  Parameters and values in
+#  dietpi-wifi.txt that we will update
+#
+if ($Use_Wifi) {
+  my %wifi_config_map = (
+    'WIFI_SSID'                      => "'$SSID'",
+    'WIFI_KEY'                       => "'$PASS'",
+    'WIFI_KEYMGR'                    => "'WPA-PSK'",
+  );
+  edit_config('dietpi-wifi.txt', \%wifi_config_map);
+}
+
+
+########################################
+#
+#  Read config file and update settings
+#
+sub edit_config {
+  my $config_file = shift;
+  my $conf_map = shift;
+  my @lines = ();
+  my %updates = ();
+  open(my $conf, '+<', $config_file) or die "- Could not find $config_file!\n";
+  LINE: while (<$conf>) {
+    while (my ($setting, $value) = each %$conf_map) {
+      if (/^#?(?:a?${setting}(?:\[0\])?)\s*=\s*/) {
+	next LINE if exists $updates{$setting};
+	chomp; s/^#//; s/=.*/=/; my $lhs = $_;
+	$_ = join("\n", map{$lhs . $_} split ',', $value) . "\n";
+	$updates{$setting} = $value;
+      }
+    }
+    push @lines, $_;
+  }
+  die "- No updates made to $config_file! Are you in the right directory?\n"
+    unless %updates;
+
+  ########################################
+  #
+  #  Confirm setting updates
+  #
+  print "\n- Settings updated in $config_file:\n";
+  while (my ($setting, $value) = each %updates) {
+    printf "    %31s = %s\n", $setting, $value;
+  }
+  if (values %$conf_map > values %updates) {
+    print "\n!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!\n";
+    print "- Some settings not found in $config_file:\n";
+    for my $setting (keys %$conf_map) {
+      printf "    %s\n", $setting if not exists $updates{$setting};
+    }
+    print "!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!\n\n";
+  }
+
+  ########################################
+  #
+  #  Write changes to $config_file
+  #
+  seek $conf, 0, 0; truncate $conf, 0;
+  print $conf @lines;
+  if (close $conf) {
+    print "- Updates to $config_file saved.\n";
+  } else {
+    die "- Could not save $config_file: $!\n";
+  }
+}
