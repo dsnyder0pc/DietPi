@@ -27,21 +27,21 @@ SJCMAC1NCLVDN:boot dsnyder$ perl ./dietpi-setup
 - Your wifi password: **********
 
 - Settings updated in dietpi.txt:
-       CONFIG_SERIAL_CONSOLE_ENABLE = 0
+       CONFIG_BOOT_WAIT_FOR_NETWORK = 2
+                   CONFIG_SOUNDCARD = usb-dac
+               AUTO_SETUP_AUTOMATED = 1
+         AUTO_SETUP_KEYBOARD_LAYOUT = us
+                  AUTO_SETUP_LOCALE = en_US.UTF-8
+         CONFIG_CHECK_CONNECTION_IP = 8.8.8.8
+         CONFIG_G_CHECK_URL_TIMEOUT = 2000
+            AUTO_SETUP_NET_HOSTNAME = roon-usb
                 AUTO_SETUP_TIMEZONE = America/Los_Angeles
             CONFIG_CHECK_DNS_DOMAIN = google.com
-           CONFIG_WIFI_COUNTRY_CODE = US
-         AUTO_SETUP_KEYBOARD_LAYOUT = us
-       CONFIG_BOOT_WAIT_FOR_NETWORK = 2
+       CONFIG_SERIAL_CONSOLE_ENABLE = 0
      AUTO_SETUP_INSTALL_SOFTWARE_ID = 5,121
-                  AUTO_SETUP_LOCALE = en_US.UTF-8
-               AUTO_SETUP_AUTOMATED = 1
         AUTO_SETUP_NET_WIFI_ENABLED = 1
-         CONFIG_CHECK_CONNECTION_IP = 8.8.8.8
+           CONFIG_WIFI_COUNTRY_CODE = US
     AUTO_SETUP_NET_ETHERNET_ENABLED = 0
-                   CONFIG_SOUNDCARD = usb-dac
-            AUTO_SETUP_NET_HOSTNAME = roon-usb
-         CONFIG_G_CHECK_URL_TIMEOUT = 5000
 - Updates to dietpi.txt saved.
 
 - Settings updated in dietpi-wifi.txt:
