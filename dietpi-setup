@@ -1,14 +1,14 @@
 #!/usr/bin/env perl
 ################################################################################
 #
-#  dietpi-stretch
+#  dietpi-setup
 #
-#  Edit dietpi.txt from DietPi Stretch for your home network
+#  Edit dietpi.txt from DietPi for your home network
 #
 #  Save this file to your microSD card and run it
 #  by typing something like this:
 #
-#     perl dietpi-stretch
+#     perl dietpi-setup
 #
 ################################################################################
 use warnings;
