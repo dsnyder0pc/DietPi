@@ -8,13 +8,13 @@ The goal with this script is to enable a Roon subscriber to easily transform a s
 Here's an example of what running it looks like on macOS after flashing a fresh microSD card with the latest Raspberry Pi DietPi image using etcher:
 
 ```
-SJCMAC1NCLVDN:boot dsnyder$ cd /Volumes/boot/
-SJCMAC1NCLVDN:boot dsnyder$ curl -Lo dietpi-setup ws-e.com/dietpi-setup
+$ cd /Volumes/boot/
+$ curl -Lo dietpi-setup ws-e.com/dietpi-setup
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   295  100   295    0     0   1710      0 --:--:-- --:--:-- --:--:--  1705
 100  6209  100  6209    0     0  12314      0 --:--:-- --:--:-- --:--:-- 12314
-SJCMAC1NCLVDN:boot dsnyder$ perl ./dietpi-setup
+$ perl ./dietpi-setup
 
 ---------------------------------------------------------
 -  This will edit dietpi.txt for your home network.
@@ -53,4 +53,4 @@ SJCMAC1NCLVDN:boot dsnyder$ perl ./dietpi-setup
 
 After doing this, eject the microSD card, shove it into the Raspberry Pi, and add power. It's not necessary to attach a display to the Raspberry Pi, but if you did, this is an example of what you might see: https://youtu.be/8uOV4iBN4KM
 
-Make sure that your USB DAC is connected to the Raspberry Pi and powered on. If all goes well, you should find your new output hiding under the Audio settings of Roon. Enable it and click on the gear to verify the settings. It will now show up in your liste of output zones. Enjoy some music.
+Make sure that your USB DAC is connected to the Raspberry Pi and powered on. If all goes well, you should find your new output hiding under the Audio settings of Roon. Enable it and click on the gear to verify the settings. It will now show up in your list of output zones. Enjoy some music.
