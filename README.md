@@ -41,6 +41,7 @@ SJCMAC1NCLVDN:boot dsnyder$ perl ./dietpi-setup
     AUTO_SETUP_NET_ETHERNET_ENABLED = 0
                    CONFIG_SOUNDCARD = usb-dac
             AUTO_SETUP_NET_HOSTNAME = roon-usb
+         CONFIG_G_CHECK_URL_TIMEOUT = 5000
 - Updates to dietpi.txt saved.
 
 - Settings updated in dietpi-wifi.txt:
