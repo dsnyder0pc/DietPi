@@ -189,8 +189,8 @@ my %config_map = (
   CONFIG_SERIAL_CONSOLE_ENABLE     => 0,
   AUTO_SETUP_NET_HOSTNAME          => $hostname,
   AUTO_SETUP_KEYBOARD_LAYOUT       => 'us',
-  CONFIG_CHECK_CONNECTION_IP       => "8.8.8.8",
-  CONFIG_CHECK_DNS_DOMAIN          => "google.com",
+  CONFIG_CHECK_CONNECTION_IP       => "127.0.0.1",
+  CONFIG_CHECK_DNS_DOMAIN          => "localhost",
   CONFIG_G_CHECK_URL_TIMEOUT       => 2000,
 );
 my $json_info = get('http://ip-api.com/json');
@@ -219,16 +219,6 @@ if ($Use_Wifi) {
   );
   edit_config('dietpi-wifi.txt', \%wifi_config_map);
 }
-
-########################################
-#
-#  Patch DietPi function to add
-#  retries for ping commands. These
-#  sometimes fail, resulting in a
-#  terrible user experience during
-#  first boot.
-#
-patch_dietpi_globals('dietpi/func/dietpi-globals');
 
 
 ########################################
@@ -284,33 +274,4 @@ sub edit_config {
   } else {
     die "- Could not save $config_file: $!\n";
   }
-}
-
-
-########################################
-#
-#  Add retries for ping tests
-#
-sub patch_dietpi_globals {
-  my $dietpi_globals = shift;
-  my @lines = ();
-  my $done = 0;
-  my $found_G_RUN_CMD = 0;
-  my $found_G_ERROR_HANDLER_RETRY = 0;
-  open(my $globals, '+<', $dietpi_globals) or die "- Could not open $dietpi_globals!\n";
-  binmode $globals;
-  while (<$globals>) {
-    push @lines, $_ unless /G_ERROR_HANDLER_RETRY=60/;
-    if (not $done) {
-      $found_G_RUN_CMD++ if /G_RUN_CMD\(\)/;
-      $found_G_ERROR_HANDLER_RETRY++ if $found_G_RUN_CMD and /G_ERROR_HANDLER_RETRY=1/;
-      if ($found_G_RUN_CMD and $found_G_ERROR_HANDLER_RETRY) {
-        push @lines, "\t\t".'if echo "$@" | grep -q ping; then G_ERROR_HANDLER_RETRY=60; fi'."\n";
-        $done++;
-      }
-    }
-  }
-  seek $globals, 0, 0; truncate $globals, 0;
-  print $globals @lines;
-  close $globals;
 }
