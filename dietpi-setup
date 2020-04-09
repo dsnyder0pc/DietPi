@@ -242,8 +242,7 @@ sub edit_config {
 	$updates{$setting} = $value;
       }
     }
-    s/\R//g;
-    push @lines, "$_\n";
+    push @lines, $_;
   }
   die "- No updates made to $config_file! Are you in the right directory?\n"
     unless %updates;
