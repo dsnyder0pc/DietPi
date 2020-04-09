@@ -190,6 +190,7 @@ my %config_map = (
   AUTO_SETUP_KEYBOARD_LAYOUT       => 'us',
   CONFIG_CHECK_CONNECTION_IP       => "8.8.8.8",
   CONFIG_CHECK_DNS_DOMAIN          => "google.com",
+  CONFIG_G_CHECK_URL_TIMEOUT       => 5000,
 );
 my $json_info = get('http://ip-api.com/json');
 $json_info =~ s/[^[:ascii:]]/_/g;
