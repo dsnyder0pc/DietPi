@@ -192,6 +192,7 @@ my %config_map = (
   CONFIG_CHECK_CONNECTION_IP       => "127.0.0.1",
   CONFIG_CHECK_DNS_DOMAIN          => "localhost",
   CONFIG_G_CHECK_URL_TIMEOUT       => 2000,
+  SURVEY_OPTED_IN                  => 0,
 );
 my $json_info = get('http://ip-api.com/json');
 $json_info =~ s/[^[:ascii:]]/_/g;
