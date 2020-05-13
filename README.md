@@ -24,33 +24,36 @@ $ perl ./dietpi-setup
 - Name your RPi (only letters, numbers and dashes): roon-usb
 - Do you have a wifi network? (y/n) : y
 - Your wifi SSID: Audiophiles
-- Your wifi password: **********
+- Your wifi password: ************
 
 - Settings updated in dietpi.txt:
-       CONFIG_BOOT_WAIT_FOR_NETWORK = 2
-                   CONFIG_SOUNDCARD = usb-dac
-               AUTO_SETUP_AUTOMATED = 1
-         AUTO_SETUP_KEYBOARD_LAYOUT = us
-                  AUTO_SETUP_LOCALE = en_US.UTF-8
-         CONFIG_CHECK_CONNECTION_IP = 8.8.8.8
-         CONFIG_G_CHECK_URL_TIMEOUT = 2000
-            AUTO_SETUP_NET_HOSTNAME = roon-usb
-                AUTO_SETUP_TIMEZONE = America/Los_Angeles
-            CONFIG_CHECK_DNS_DOMAIN = google.com
-       CONFIG_SERIAL_CONSOLE_ENABLE = 0
-     AUTO_SETUP_INSTALL_SOFTWARE_ID = 5,121
-        AUTO_SETUP_NET_WIFI_ENABLED = 1
            CONFIG_WIFI_COUNTRY_CODE = US
+        AUTO_SETUP_NET_WIFI_ENABLED = 1
+     AUTO_SETUP_INSTALL_SOFTWARE_ID = 5,121
+                  AUTO_SETUP_LOCALE = en_US.UTF-8
+       CONFIG_SERIAL_CONSOLE_ENABLE = 0
+               AUTO_SETUP_AUTOMATED = 1
+            CONFIG_CHECK_DNS_DOMAIN = localhost
     AUTO_SETUP_NET_ETHERNET_ENABLED = 0
+         AUTO_SETUP_KEYBOARD_LAYOUT = us
+                    SURVEY_OPTED_IN = 0
+                AUTO_SETUP_TIMEZONE = America/Los_Angeles
+            AUTO_SETUP_NET_HOSTNAME = roon-usb
+                   CONFIG_SOUNDCARD = usb-dac
+       CONFIG_BOOT_WAIT_FOR_NETWORK = 2
+         CONFIG_G_CHECK_URL_TIMEOUT = 2000
+         CONFIG_CHECK_CONNECTION_IP = 127.0.0.1
 - Updates to dietpi.txt saved.
 
 - Settings updated in dietpi-wifi.txt:
-                           WIFI_KEY = '**********'
-                          WIFI_SSID = 'Audiophiles'
                         WIFI_KEYMGR = 'WPA-PSK'
+                          WIFI_SSID = 'Audiophiles'
+                           WIFI_KEY = '************'
 - Updates to dietpi-wifi.txt saved.
 ```
 
-After doing this, eject the microSD card, shove it into the Raspberry Pi, and add power. It's not necessary to attach a display to the Raspberry Pi, but if you did, this is an example of what you might see: https://youtu.be/8uOV4iBN4KM
+After doing this, eject the microSD card, shove it into the Raspberry Pi, and add power. It's not necessary to attach a display to the Raspberry Pi, but if you did, this is an example of what you might see: https://youtu.be/4g6YxaAaG_A?t=855
+
+More details here: https://docs.google.com/document/d/1QOBJoIwk48TFuAgFWJn25vjGTBNifXfScoVXJnBBEyY/edit?usp=sharing
 
 Make sure that your USB DAC is connected to the Raspberry Pi and powered on. If all goes well, you should find your new output hiding under the Audio settings of Roon. Enable it and click on the gear to verify the settings. It will now show up in your list of output zones. Enjoy some music.
