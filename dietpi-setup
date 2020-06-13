@@ -199,8 +199,8 @@ $json_info =~ s/[^[:ascii:]]/_/g;
 $json_info =~ s/\\+u\d+//g;
 my $info = from_json($json_info);
 if (defined $info) {
-  $config_map{'CONFIG_WIFI_COUNTRY_CODE'} = $info->{'countryCode'};
-  $config_map{'AUTO_SETUP_TIMEZONE'}      = $info->{'timezone'};
+  $config_map{'AUTO_SETUP_NET_WIFI_COUNTRY_CODE'} = $info->{'countryCode'};
+  $config_map{'AUTO_SETUP_TIMEZONE'} = $info->{'timezone'};
 }
 if (exists $ENV{'LANG'} and $ENV{'LANG'} =~ /^(\w+)\.utf.*8$/i) {
   $config_map{'AUTO_SETUP_LOCALE'} = "$1.UTF-8",
