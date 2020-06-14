@@ -9,11 +9,11 @@ Here's an example of what running it looks like on macOS after flashing a fresh 
 
 ```
 $ cd /Volumes/boot/
-$ curl -Lo dietpi-setup ws-e.com/dietpi-setup
+$ curl -LO ws-e.com/dietpi-setup
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100   295  100   295    0     0   1710      0 --:--:-- --:--:-- --:--:--  1705
-100  6209  100  6209    0     0  12314      0 --:--:-- --:--:-- --:--:-- 12314
+100   295  100   295    0     0    885      0 --:--:-- --:--:-- --:--:--   885
+100  6875  100  6875    0     0  10448      0 --:--:-- --:--:-- --:--:-- 68069
 $ perl ./dietpi-setup
 
 ---------------------------------------------------------
