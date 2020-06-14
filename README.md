@@ -27,22 +27,29 @@ $ perl ./dietpi-setup
 - Your wifi password: ************
 
 - Settings updated in dietpi.txt:
-           CONFIG_WIFI_COUNTRY_CODE = US
-        AUTO_SETUP_NET_WIFI_ENABLED = 1
-     AUTO_SETUP_INSTALL_SOFTWARE_ID = 5,121
-                  AUTO_SETUP_LOCALE = en_US.UTF-8
-       CONFIG_SERIAL_CONSOLE_ENABLE = 0
-               AUTO_SETUP_AUTOMATED = 1
-            CONFIG_CHECK_DNS_DOMAIN = localhost
     AUTO_SETUP_NET_ETHERNET_ENABLED = 0
-         AUTO_SETUP_KEYBOARD_LAYOUT = us
                     SURVEY_OPTED_IN = 0
-                AUTO_SETUP_TIMEZONE = America/Los_Angeles
-            AUTO_SETUP_NET_HOSTNAME = roon-usb
-                   CONFIG_SOUNDCARD = usb-dac
        CONFIG_BOOT_WAIT_FOR_NETWORK = 2
-         CONFIG_G_CHECK_URL_TIMEOUT = 2000
+         CONFIG_G_CHECK_URL_TIMEOUT = 300
+       CONFIG_SERIAL_CONSOLE_ENABLE = 0
+            AUTO_SETUP_NET_HOSTNAME = roon-usb
+                  AUTO_SETUP_LOCALE = en_US.UTF-8
+            CONFIG_CHECK_DNS_DOMAIN = localhost
          CONFIG_CHECK_CONNECTION_IP = 127.0.0.1
+    AUTO_SETUP_NET_WIFI_COUNTRY_CODE = US
+               AUTO_SETUP_AUTOMATED = 1
+                   CONFIG_SOUNDCARD = usb-dac
+        AUTO_SETUP_NET_WIFI_ENABLED = 1
+        CONFIG_G_CHECK_URL_ATTEMPTS = 5
+     AUTO_SETUP_INSTALL_SOFTWARE_ID = 5,121
+         AUTO_SETUP_KEYBOARD_LAYOUT = us
+                AUTO_SETUP_TIMEZONE = America/Los_Angeles
+
+!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!
+- Some settings not found in dietpi.txt:
+    CONFIG_WIFI_COUNTRY_CODE
+!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!
+
 - Updates to dietpi.txt saved.
 
 - Settings updated in dietpi-wifi.txt:
@@ -51,6 +58,8 @@ $ perl ./dietpi-setup
                            WIFI_KEY = '************'
 - Updates to dietpi-wifi.txt saved.
 ```
+
+If you see the `CONFIG_WIFI_COUNTRY_CODE` warning, you can ignore it for now. I'll remove this once legacy support for the January 26th build of DietPi for RPi on ARMv6 is no longer required.
 
 After doing this, eject the microSD card, shove it into the Raspberry Pi, and add power. It's not necessary to attach a display to the Raspberry Pi, but if you did, this is an example of what you might see: https://youtu.be/4g6YxaAaG_A?t=855
 
