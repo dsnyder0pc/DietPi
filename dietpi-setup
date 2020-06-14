@@ -227,6 +227,21 @@ if ($Use_Wifi) {
 
 ########################################
 #
+#  Write pre-boot script to deal with
+#  RF-kill nonsense in the June 8th
+#  build.
+#
+open(my $pre_script, '>', 'Automation_Custom_PreScript.sh') or die;
+print $pre_script <<'EOT';
+rfkill list all
+rfkill unblock all
+ip link set wlan0 up
+EOT
+close $pre_script or die;
+
+
+########################################
+#
 #  Read config file and update settings
 #
 sub edit_config {
