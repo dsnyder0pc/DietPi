@@ -231,13 +231,15 @@ if ($Use_Wifi) {
 #  RF-kill nonsense in the June 8th
 #  build.
 #
-open(my $pre_script, '>', 'Automation_Custom_PreScript.sh') or die;
-print $pre_script <<'EOT';
+if ($Use_Wifi) {
+  open(my $pre_script, '>', 'Automation_Custom_PreScript.sh') or die;
+  print $pre_script <<'EOT';
 rfkill list all
 rfkill unblock all
 ip link set wlan0 up
 EOT
-close $pre_script or die;
+  close $pre_script or die;
+}
 
 
 ########################################
