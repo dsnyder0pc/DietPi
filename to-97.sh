@@ -11,7 +11,7 @@
 #
 ################################################################################
 
-target="4.19.97-v7+"
+target="4.19.97-v7+"   # must update this when you change build
 build="1.20200212-1"
 arch=armhf
 repo="https://archive.raspberrypi.org/debian/pool/main/r/raspberrypi-firmware"
@@ -21,6 +21,10 @@ pkgs="
   libraspberrypi0
   libraspberrypi-bin
 "
+if dpkg --list raspberrypi-kernel-headers > /dev/null 2>&1; then
+  pkgs="${pkgs} raspberrypi-kernel-headers"
+fi
+
 . /boot/dietpi/.version
 if [ "${G_DIETPI_VERSION_CORE}" != 6 ] ||
    [ "${G_DIETPI_VERSION_SUB}"  != 30 ]; then
