@@ -1,0 +1,34 @@
+#!/bin/bash
+################################################################################
+#
+#  to-97.sh
+#
+#  There are audio quality problems with the 4.19.118-v7+ #1311 SMP kernel
+#  that ships with DietPi v6.30.0. This script downgrades the kernel to
+#  4.19.97-v7+, which sounds great.
+#
+#  Details in https://github.com/MichaIng/DietPi/issues/3608
+#
+################################################################################
+
+target="4.19.97-v7+"
+build="1.20200212-1"
+arch=armhf
+repo="https://archive.raspberrypi.org/debian/pool/main/r/raspberrypi-firmware"
+pkgs="
+  raspberrypi-kernel
+  raspberrypi-kernel-headers
+  raspberrypi-bootloader
+  libraspberrypi0
+"
+
+if [ "$(uname -r)" == "${target}" ]; then
+  echo "Already running Linux ${target}"
+  exit 0
+else
+  echo "Updating Linux to ${target}"
+fi
+for pkg in $pkgs; do
+  curl -LO "${repo}/${pkg}_${build}_${arch}.deb" || exit 1
+done
+dpkg -i ./*.deb
