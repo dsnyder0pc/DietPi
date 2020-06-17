@@ -17,7 +17,6 @@ arch=armhf
 repo="https://archive.raspberrypi.org/debian/pool/main/r/raspberrypi-firmware"
 pkgs="
   raspberrypi-kernel
-  raspberrypi-kernel-headers
   raspberrypi-bootloader
   libraspberrypi0
   libraspberrypi-bin
