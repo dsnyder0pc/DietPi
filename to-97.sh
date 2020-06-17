@@ -21,6 +21,13 @@ pkgs="
   raspberrypi-bootloader
   libraspberrypi0
 "
+. /boot/dietpi/.version
+if [ "${G_DIETPI_VERSION_CORE}" != 6 ] ||
+   [ "${G_DIETPI_VERSION_SUB}"  != 30 ]; then
+  echo "This scrit has only been tested on DietPi v6.30"
+  echo "You are running v${G_DIETPI_VERSION_CORE}.${G_DIETPI_VERSION_SUB}"
+  exit 1
+fi
 
 if [ "$(uname -r)" == "${target}" ]; then
   echo "Already running Linux ${target}"
