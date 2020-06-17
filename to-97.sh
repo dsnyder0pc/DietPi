@@ -20,6 +20,7 @@ pkgs="
   raspberrypi-kernel-headers
   raspberrypi-bootloader
   libraspberrypi0
+  libraspberrypi-bin
 "
 . /boot/dietpi/.version
 if [ "${G_DIETPI_VERSION_CORE}" != 6 ] ||
