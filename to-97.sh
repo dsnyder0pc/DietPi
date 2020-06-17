@@ -28,7 +28,11 @@ if [ "$(uname -r)" == "${target}" ]; then
 else
   echo "Updating Linux to ${target}"
 fi
+
+rm -rf kernel.$$
+mkdir -v kernel.$$ && cd kernel.$$ || exit 1
 for pkg in $pkgs; do
   curl -LO "${repo}/${pkg}_${build}_${arch}.deb" || exit 1
 done
 dpkg -i ./*.deb
+cd - && rm -rv kernel.$$
