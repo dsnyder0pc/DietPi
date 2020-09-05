@@ -26,9 +26,11 @@ if dpkg --list raspberrypi-kernel-headers > /dev/null 2>&1; then
 fi
 
 . /boot/dietpi/.version
-if [ "${G_DIETPI_VERSION_CORE}" != 6 ] ||
-   [ "${G_DIETPI_VERSION_SUB}"  != 30 ]; then
-  echo "This scrit has only been tested on DietPi v6.30"
+if [ "${G_DIETPI_VERSION_CORE}" == 6 ] &&
+   echo "${G_DIETPI_VERSION_SUB}" | grep -q '^3[012]$'; then
+  true
+else
+  echo "This scrit has only been tested on DietPi v6.30 - v6.32"
   echo "You are running v${G_DIETPI_VERSION_CORE}.${G_DIETPI_VERSION_SUB}"
   exit 1
 fi
