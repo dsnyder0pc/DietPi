@@ -11,7 +11,7 @@
 #
 ################################################################################
 
-tries=5
+tries=20
 until [ -n "${PID}" ]; do
   echo "Looking for RAATServer.exe"
   PID=$(pgrep -f RAATServer.exe)
