@@ -182,6 +182,8 @@ if ($Have_Wifi =~ /^n/) {
 my %config_map = (
   AUTO_SETUP_NET_ETHERNET_ENABLED  => $Use_Ethernet,
   AUTO_SETUP_NET_WIFI_ENABLED      => $Use_Wifi,
+  AUTO_SETUP_TIMEZONE              => 'America/Los_Angeles',
+  AUTO_SETUP_NET_WIFI_COUNTRY_CODE => 'US',
   AUTO_SETUP_AUTOMATED             => 1,
   CONFIG_BOOT_WAIT_FOR_NETWORK     => 2,
   AUTO_SETUP_INSTALL_SOFTWARE_ID   => "5,121",
@@ -196,12 +198,14 @@ my %config_map = (
   SURVEY_OPTED_IN                  => 0,
   CONFIG_SERIAL_CONSOLE_ENABLE     => 0,
 );
+my $info;
 my $json_info = get('http://ip-api.com/json');
-$json_info =~ s/[^[:ascii:]]/_/g;
-$json_info =~ s/\\+u\d+//g;
-my $info = from_json($json_info);
+if (defined $json_info) {
+  $json_info =~ s/[^[:ascii:]]/_/g;
+  $json_info =~ s/\\+u\d+//g;
+  $info = from_json($json_info);
+}
 if (defined $info) {
-  $config_map{'CONFIG_WIFI_COUNTRY_CODE'} = $info->{'countryCode'};  # Old
   $config_map{'AUTO_SETUP_NET_WIFI_COUNTRY_CODE'} = $info->{'countryCode'};
   $config_map{'AUTO_SETUP_TIMEZONE'} = $info->{'timezone'};
 }
@@ -273,7 +277,7 @@ sub edit_config {
   #
   print "\n- Settings updated in $config_file:\n";
   while (my ($setting, $value) = each %updates) {
-    printf "    %31s = %s\n", $setting, $value;
+    printf "    %32s = %s\n", $setting, $value;
   }
   if (values %$conf_map > values %updates) {
     print "\n!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!\n";
