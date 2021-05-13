@@ -204,7 +204,10 @@ if (defined $json_info) {
   $json_info =~ s/[^[:ascii:]]/_/g;
   $json_info =~ s/\\+u\d+//g;
   $info = from_json($json_info);
+} else {
+  warn "\nWARNING: Could not reach http://ip-api.com/json. Using defaults.\n";
 }
+
 if (defined $info) {
   $config_map{'AUTO_SETUP_NET_WIFI_COUNTRY_CODE'} = $info->{'countryCode'};
   $config_map{'AUTO_SETUP_TIMEZONE'} = $info->{'timezone'};
